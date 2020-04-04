@@ -1,14 +1,16 @@
 module Speller where
 
-import Data.List
-
-singleWordSpell :: [Char] -> [Char]
+singleWordSpell :: String -> String
 singleWordSpell [] = []
 -- more pattern matching http://learnyouahaskell.com/syntax-in-functions
 -- similar to Scala, by the way :)
 singleWordSpell word@(firstLetter:_) = firstLetter : " is for " ++ word
 
-speller :: [[Char]] -> [Char]
--- Such a common functionality must have been already implemented.
--- It looks better than explict foldR IMHO
-speller = intercalate ", " . map singleWordSpell
+combine :: [a] -> [a] -> [[a]] -> [a]
+combine middle last [] = [] 
+combine middle last [x] = x
+combine middle last [x1, x2] =  x1 ++ last ++ x2
+combine middle last (x : xs) =  x ++ middle ++ combine middle last xs
+
+speller :: [String] -> String
+speller = combine ", " ", and " . map singleWordSpell
